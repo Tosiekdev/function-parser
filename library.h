@@ -1,0 +1,6 @@
+#ifndef FUNCTION_PARSER_LIBRARY_H
+#define FUNCTION_PARSER_LIBRARY_H
+
+void hello();
+
+#endif //FUNCTION_PARSER_LIBRARY_H
