@@ -1,0 +1,6 @@
+enable_testing()
+add_executable(parser_test test.cpp)
+target_link_libraries(parser_test GTest::gtest_main lexy)
+target_include_directories(parser_test PRIVATE ../src)
+include(GoogleTest)
+gtest_discover_tests(parser_test)
