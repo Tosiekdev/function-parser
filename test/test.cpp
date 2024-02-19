@@ -3,9 +3,11 @@
 //
 
 #include <gtest/gtest.h>
+#include <lexy/input/string_input.hpp>
 #include "../src/library.hpp"
 
 TEST(HelloTest, BasicAssertions) {
-    EXPECT_EQ(2 + 3, az::hello());
+    auto input = lexy::zstring_input("x");
+    EXPECT_EQ(lexy::match<az::grammar::polynomial>(input), true);
 }
 
