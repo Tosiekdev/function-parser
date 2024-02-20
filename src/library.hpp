@@ -52,12 +52,16 @@ namespace az {
                     auto integer  = dsl::digits<>.no_leading_zero();
                     auto fraction = dsl::digits<>;
 
-                    return integer + dsl::if_(dsl::period >> fraction);
+                    return integer >> dsl::if_(dsl::period >> fraction);
                 }();
             };
 
             struct atom {
-                static constexpr auto rule = dsl::try_(dsl::p<number>) + dsl::lit<"x"> + dsl::opt(dsl::lit_c<'^'> >> dsl::p<number>);
+                static constexpr auto rule = []{
+                    auto with_number = dsl::p<number> >> dsl::opt(dsl::lit_c<'x'> >> dsl::opt(dsl::lit_c<'^'> >> dsl::p<number>));
+                    auto without_number = dsl::lit_c<'x'> >> dsl::opt(dsl::lit_c<'^'> >> dsl::p<number>);
+                    return with_number | without_number;
+                }();
             };
 
             struct polynomial {

@@ -7,7 +7,7 @@
 #include "../src/library.hpp"
 
 TEST(HelloTest, BasicAssertions) {
-    auto input = lexy::zstring_input("x");
-    EXPECT_EQ(lexy::match<az::grammar::polynomial>(input), true);
+    auto input = lexy::zstring_input("x+x^2");
+    EXPECT_EQ(lexy::match<az::grammar::atom>(input), true);
 }
 
