@@ -67,11 +67,22 @@ namespace az {
 
             struct basic_function {
                 static constexpr auto rule =
-                        dsl::p<function_kw> >> dsl::lit<"("> >> dsl::p<polynomial> >> dsl::lit<")">;
+                        dsl::p<function_kw> >> dsl::lit<"("> >> dsl::p<polynomial> >> dsl::lit<")">
+                        | dsl::p<polynomial>;
+            };
+
+            struct intermediate_function {
+                static constexpr auto rule =
+                        dsl::p<function_kw>
+                        >> dsl::lit<"(">
+                        >> dsl::p<basic_function>
+                        >> dsl::while_(dsl::lit_c<'+'> >> dsl::p<basic_function>
+                                | dsl::lit_c<'-'> >> dsl::p<basic_function>)
+                        >> dsl::lit<")">;
             };
 
             struct expression {
-                static constexpr auto rule = dsl::p<polynomial> | dsl::p<basic_function>;
+                static constexpr auto rule = dsl::p<basic_function>;
             };
         }
     }

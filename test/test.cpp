@@ -36,3 +36,11 @@ TEST(GrammarTest, BasicFunction) {
     EXPECT_TRUE(lexy::match<az::grammar::basic_function>(sine));
     EXPECT_FALSE(lexy::match<az::grammar::basic_function>(faulty_sine));
 }
+
+TEST(GrammarTest, IntermediateFunction) {
+    auto sine_of_sine = lexy::zstring_input("sin(sin(x+x^2))");
+    auto sine_of_addition = lexy::zstring_input("sin(cos(x)+x^2)");
+
+    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function>(sine_of_sine));
+    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function>(sine_of_addition));
+}
