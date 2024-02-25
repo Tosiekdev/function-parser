@@ -43,10 +43,6 @@ namespace az {
                         | dsl::p<square_root> | dsl::p<cube_root>;
             };
 
-            struct argument_function {
-                static constexpr auto rule = dsl::p<function_kw> + dsl::lit<"("> + dsl::lit<")">;
-            };
-
             struct number {
                 static constexpr auto rule = [] {
                     auto integer  = dsl::digits<>.no_leading_zero();
@@ -66,11 +62,16 @@ namespace az {
 
             struct polynomial {
                 static constexpr auto rule =
-                        dsl::p<atom> + dsl::while_(dsl::lit_c<'+'> >> dsl::p<atom> | dsl::lit_c<'-'> >> dsl::p<atom>);
+                        dsl::p<atom> >> dsl::while_(dsl::lit_c<'+'> >> dsl::p<atom> | dsl::lit_c<'-'> >> dsl::p<atom>);
+            };
+
+            struct basic_function {
+                static constexpr auto rule =
+                        dsl::p<function_kw> >> dsl::lit<"("> >> dsl::p<polynomial> >> dsl::lit<")">;
             };
 
             struct expression {
-                static constexpr auto rule = dsl::p<atom>;
+                static constexpr auto rule = dsl::p<polynomial> | dsl::p<basic_function>;
             };
         }
     }
