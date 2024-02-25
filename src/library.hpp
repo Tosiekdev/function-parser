@@ -65,7 +65,8 @@ namespace az {
             };
 
             struct polynomial {
-                static constexpr auto rule = dsl::p<atom> + dsl::while_(dsl::lit_c<'+'> >> dsl::p<atom>);
+                static constexpr auto rule =
+                        dsl::p<atom> + dsl::while_(dsl::lit_c<'+'> >> dsl::p<atom> | dsl::lit_c<'-'> >> dsl::p<atom>);
             };
 
             struct expression {
