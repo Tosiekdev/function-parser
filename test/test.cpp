@@ -37,6 +37,20 @@ TEST(GrammarTest, BasicFunction) {
     EXPECT_FALSE(lexy::match<az::grammar::basic_function>(faulty_sine));
 }
 
+TEST(GrammarTest, BasicFunctionsChain) {
+    auto sum_of_sines = lexy::zstring_input("sin(x+x^2) + sin(x+2x)");
+    auto sine = lexy::zstring_input("sin(x+x^2)");
+    auto atom = lexy::zstring_input("x");
+    auto polynomial = lexy::zstring_input("x+x^2");
+    auto faulty_sine = lexy::zstring_input("sin(x+x2)");
+
+    EXPECT_TRUE(lexy::match<az::grammar::basic_functions_chain>(sum_of_sines));
+    EXPECT_TRUE(lexy::match<az::grammar::basic_functions_chain>(sine));
+    EXPECT_TRUE(lexy::match<az::grammar::basic_functions_chain>(atom));
+    EXPECT_TRUE(lexy::match<az::grammar::basic_functions_chain>(polynomial));
+    EXPECT_FALSE(lexy::match<az::grammar::basic_functions_chain>(faulty_sine));
+}
+
 TEST(GrammarTest, IntermediateFunction) {
     auto sine_of_sine = lexy::zstring_input("sin(sin(x+x^2))");
     auto sine_of_addition = lexy::zstring_input("sin(cos(x)+x^2)");
