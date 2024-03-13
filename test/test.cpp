@@ -3,8 +3,16 @@
 //
 
 #include <gtest/gtest.h>
+#include <lexy/dsl.hpp>
 #include <lexy/input/string_input.hpp>
 #include "../src/library.hpp"
+
+namespace {
+    struct test_intermediate_function_chain {
+        static constexpr auto rule =
+                lexy::dsl::p<az::grammar::intermediate_function_chain> >> lexy::dsl::eof;
+    };
+}
 
 TEST(GrammarTest, Atom) {
     auto single = lexy::zstring_input("x");
@@ -62,11 +70,11 @@ TEST(GrammarTest, IntermediateFunction) {
 TEST(GrammarTest, IntermediateFunctionChain) {
     auto sine_of_sine = lexy::zstring_input("sin(sin(x+x^2))");
     auto sine_of_addition = lexy::zstring_input("sin(cos(x)+x^2)");
-    auto addition = lexy::zstring_input("sin(sin(x+x^2)) + sin(cos(x)+x^2)");
-    auto subtract = lexy::zstring_input("sin(sin(x+x^2)) - sin(cos(x)+x^2)");
+    auto addition = lexy::zstring_input("sin(sin(x+x^2))+sin(cos(x)+x^2)");
+    auto subtract = lexy::zstring_input("sin(sin(x+x^2))-sin(cos(x)+x^2)");
 
-    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(sine_of_sine));
-    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(sine_of_addition));
-    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(addition));
-    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(subtract));
+    EXPECT_TRUE(lexy::match<test_intermediate_function_chain>(sine_of_sine));
+    EXPECT_TRUE(lexy::match<test_intermediate_function_chain>(sine_of_addition));
+    EXPECT_TRUE(lexy::match<test_intermediate_function_chain>(addition));
+    EXPECT_TRUE(lexy::match<test_intermediate_function_chain>(subtract));
 }
