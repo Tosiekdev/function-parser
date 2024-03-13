@@ -58,3 +58,15 @@ TEST(GrammarTest, IntermediateFunction) {
     EXPECT_TRUE(lexy::match<az::grammar::intermediate_function>(sine_of_sine));
     EXPECT_TRUE(lexy::match<az::grammar::intermediate_function>(sine_of_addition));
 }
+
+TEST(GrammarTest, IntermediateFunctionChain) {
+    auto sine_of_sine = lexy::zstring_input("sin(sin(x+x^2))");
+    auto sine_of_addition = lexy::zstring_input("sin(cos(x)+x^2)");
+    auto addition = lexy::zstring_input("sin(sin(x+x^2)) + sin(cos(x)+x^2)");
+    auto subtract = lexy::zstring_input("sin(sin(x+x^2)) - sin(cos(x)+x^2)");
+
+    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(sine_of_sine));
+    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(sine_of_addition));
+    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(addition));
+    EXPECT_TRUE(lexy::match<az::grammar::intermediate_function_chain>(subtract));
+}
