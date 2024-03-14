@@ -21,11 +21,11 @@ namespace az {
                 static constexpr auto rule = dsl::lit<"cos">;
             };
 
-            struct tangens {
+            struct tangent {
                 static constexpr auto rule = dsl::lit<"tan">;
             };
 
-            struct cotangens {
+            struct cotangent {
                 static constexpr auto rule = dsl::lit<"cot">;
             };
 
@@ -39,8 +39,8 @@ namespace az {
 
             struct function_kw {
                 static constexpr auto rule = dsl::p<sine> | dsl::p<cosine>
-                        | dsl::p<tangens> | dsl::p<cotangens>
-                        | dsl::p<square_root> | dsl::p<cube_root>;
+                                             | dsl::p<tangent> | dsl::p<cotangent>
+                                             | dsl::p<square_root> | dsl::p<cube_root>;
             };
 
             struct number {
