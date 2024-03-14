@@ -84,7 +84,7 @@ namespace az {
                         dsl::lit<"("> >> dsl::p<basic_functions_chain> >> dsl::lit<")">;
             };
 
-            struct intermediate_function_chain {
+            struct intermediate_functions_chain {
                 static constexpr auto rule =
                         dsl::p<intermediate_function> >>
                         dsl::while_(dsl::lit_c<'+'> >> dsl::p<intermediate_function>
