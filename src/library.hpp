@@ -91,6 +91,12 @@ namespace az {
                                 | dsl::lit_c<'-'> >> dsl::p<intermediate_function>);
             };
 
+            struct advanced_function {
+                static constexpr auto rule =
+                        dsl::p<function_kw> >>
+                        dsl::lit<"("> >> dsl::p<intermediate_functions_chain> >> dsl::lit<")">;
+            };
+
             struct expression {
                 static constexpr auto rule = dsl::p<basic_function>;
             };

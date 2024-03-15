@@ -37,6 +37,11 @@ namespace test{
         static constexpr auto rule =
                 lexy::dsl::p<az::grammar::intermediate_functions_chain> >> lexy::dsl::eof;
     };
+
+    struct advanced_function {
+        static constexpr auto rule =
+                lexy::dsl::p<az::grammar::advanced_function> >> lexy::dsl::eof;
+    };
 }
 
 TEST(GrammarTest, Atom) {
@@ -102,4 +107,12 @@ TEST(GrammarTest, IntermediateFunctionChain) {
     EXPECT_TRUE(lexy::match<test::intermediate_functions_chain>(sine_of_addition));
     EXPECT_TRUE(lexy::match<test::intermediate_functions_chain>(addition));
     EXPECT_TRUE(lexy::match<test::intermediate_functions_chain>(subtract));
+}
+
+TEST(GrammarTest, AdvancedFunction) {
+    auto sine_of_addition = lexy::zstring_input("sin(sin(sin(x+x^2))+sin(cos(x)+x^2))");
+    auto cosine_of_subtraction = lexy::zstring_input("cos(sin(sin(x+x^2))-sin(cos(x)+x^2))");
+
+    EXPECT_TRUE(lexy::match<test::advanced_function>(sine_of_addition));
+    EXPECT_TRUE(lexy::match<test::advanced_function>(cosine_of_subtraction));
 }
