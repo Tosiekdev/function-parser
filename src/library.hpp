@@ -67,8 +67,8 @@ namespace az {
 
             struct basic_function {
                 static constexpr auto rule =
-                        dsl::p<function_kw> >> dsl::lit<"("> >> dsl::p<polynomial> >> dsl::lit<")">
-                        | dsl::p<polynomial>;
+                        dsl::p<polynomial> |
+                        dsl::p<function_kw> >> dsl::lit<"("> >> dsl::p<polynomial> >> dsl::lit<")">;
             };
 
             struct basic_functions_chain {
@@ -81,7 +81,7 @@ namespace az {
             struct intermediate_function {
                 static constexpr auto rule =
                         dsl::p<function_kw> >>
-                        dsl::lit<"("> >> dsl::p<basic_functions_chain> >> dsl::lit<")">;
+                        dsl::lit<"("> >> dsl::p<basic_functions_chain> >> dsl::lit<")"> | dsl::p<basic_functions_chain>;
             };
 
             struct intermediate_functions_chain {
@@ -94,7 +94,15 @@ namespace az {
             struct advanced_function {
                 static constexpr auto rule =
                         dsl::p<function_kw> >>
-                        dsl::lit<"("> >> dsl::p<intermediate_functions_chain> >> dsl::lit<")">;
+                        dsl::lit<"("> >> dsl::p<intermediate_functions_chain> >> dsl::lit<")">
+                                | dsl::p<intermediate_functions_chain>;
+            };
+
+            struct advanced_functions_chain {
+                static constexpr auto rule =
+                        dsl::p<advanced_function> >>
+                        dsl::while_(dsl::lit_c<'+'> >> dsl::p<advanced_function>
+                        | dsl::lit_c<'-'> >> dsl::p<advanced_function>);
             };
 
             struct expression {
