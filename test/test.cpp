@@ -47,6 +47,16 @@ namespace test{
         static constexpr auto rule =
                 lexy::dsl::p<az::grammar::advanced_functions_chain> >> lexy::dsl::eof;
     };
+
+    struct fun_of_advanced_functions_chain {
+        static constexpr auto rule =
+                lexy::dsl::p<az::grammar::fun_of_advanced_functions_chain> >> lexy::dsl::eof;
+    };
+
+    struct expression {
+        static constexpr auto rule =
+                lexy::dsl::p<az::grammar::function> >> lexy::dsl::eof;
+    };
 }
 
 TEST(GrammarTest, Atom) {
@@ -135,14 +145,28 @@ TEST(GrammarTest, AdvancedFunction) {
 TEST(GrammarTest, AdvancedFunctionChain) {
     auto sine_cosine_addition =
             lexy::zstring_input("sin(sin(sin(x+x^2))+sin(cos(x)+x^2))+cos(sin(sin(x+x^2))-sin(cos(x)+x^2))");
+    auto sine_cosine_addition_faulty =
+            lexy::zstring_input("sin(sin(sin(x+x^2))+sin(cos(x)+x^2))+cos(sin(sin(x+x^2))-sin(cos(x)+x^2)");
     auto polynomial = lexy::zstring_input("x^2+2x");
     auto itermediate_function = lexy::zstring_input("sin(cos(x)+x^2)");
     auto intermediate_functions_chain = lexy::zstring_input("sin(sin(x+x^2))+sin(cos(x)+x^2)");
     auto atom = lexy::zstring_input("x");
+    auto mix =
+            lexy::zstring_input("sin(sin(sin(x+x^2))+sin(cos(x)+x^2))+cos(sin(sin(x+x^2))-sin(cos(x)+x^2))+x");
 
     EXPECT_TRUE(lexy::match<test::advanced_functions_chain>(sine_cosine_addition));
     EXPECT_TRUE(lexy::match<test::advanced_functions_chain>(polynomial));
     EXPECT_TRUE(lexy::match<test::advanced_functions_chain>(itermediate_function));
     EXPECT_TRUE(lexy::match<test::advanced_functions_chain>(intermediate_functions_chain));
     EXPECT_TRUE(lexy::match<test::advanced_functions_chain>(atom));
+    EXPECT_TRUE(lexy::match<test::advanced_functions_chain>(mix));
+
+    EXPECT_FALSE(lexy::match<test::advanced_functions_chain>(sine_cosine_addition_faulty));
+}
+
+TEST(GrammarTest, FunOfAdvancedFunctionsChain) {
+    auto sine_of_mix =
+            lexy::zstring_input("sin(sin(sin(sin(x+x^2))+sin(cos(x)+x^2))+cos(sin(sin(x+x^2))-sin(cos(x)+x^2))+x)");
+
+    EXPECT_TRUE(lexy::match<test::fun_of_advanced_functions_chain>(sine_of_mix));
 }

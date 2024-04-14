@@ -105,14 +105,23 @@ namespace az {
                         | dsl::lit_c<'-'> >> dsl::p<advanced_function>);
             };
 
+            struct fun_of_advanced_functions_chain {
+                static constexpr auto rule =
+                        dsl::p<function_kw> >> dsl::lit<"("> >> dsl::p<advanced_functions_chain> >> dsl::lit<")">;
+            };
+
             struct expression {
-                static constexpr auto rule = dsl::p<basic_function>;
+                static constexpr auto rule =
+                        dsl::p<advanced_functions_chain> | dsl::p<fun_of_advanced_functions_chain>;
+            };
+
+            struct function {
+                static constexpr auto rule =
+                        dsl::p<expression> >>
+                        dsl::while_(dsl::lit_c<'+'> >> dsl::p<expression>
+                        | dsl::lit_c<'-'> >> dsl::p<expression>);
             };
         }
-    }
-
-    int hello() {
-        return 4;
     }
 }
 
