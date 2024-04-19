@@ -4,9 +4,18 @@
 #include <lexy/dsl.hpp>
 
 /*
- * FUNCTION -> OPERATION | (OPERATION)
- * OPERATION -> ADDITION | MULTIPLICATION | DIVISION | EXPONENTIATION | ONE_ARG
- * ADDITION -> 
+ * sine -> "sin"
+ * cosine -> "cos"
+ * tangent -> "tan"
+ * cotangent -> "cot"
+ * square_root -> "sqrt"
+ * cube_root -> "cbrt"
+ * function_kw -> sine | cosine | tangent | cotangent | square_root | cube_root
+ * number -> floating point bigger than 1 (for now - I just saw the bug)
+ * atom -> number | number"x" | number"x^"number | "x" | "x^"number
+ * polynomial -> atom | atom+polynomial | atom-polynomial
+ * basic_function -> polynomial | function_kw"("polynomial")"
+ * basic_function_chain -> basic_function | basic_function+basic_function_chain | basic_function+basic_function_chain
  * */
 
 namespace az {

@@ -83,9 +83,11 @@ TEST(GrammarTest, Polynomial) {
 }
 
 TEST(GrammarTest, BasicFunction) {
+    auto polynomial = lexy::zstring_input("x");
     auto sine = lexy::zstring_input("sin(x+x^2)");
     auto faulty_sine = lexy::zstring_input("sin(x+x2)");
 
+    EXPECT_TRUE(lexy::match<test::basic_function>(polynomial));
     EXPECT_TRUE(lexy::match<test::basic_function>(sine));
     EXPECT_FALSE(lexy::match<test::basic_function>(faulty_sine));
 }
