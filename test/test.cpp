@@ -7,56 +7,19 @@
 #include <lexy/input/string_input.hpp>
 #include "../src/library.hpp"
 
+#define WRAP(x) struct x {static constexpr auto rule = lexy::dsl::p<az::grammar::x> >> lexy::dsl::eof;}
+
 namespace test{
-    struct atom {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::atom> >> lexy::dsl::eof;
-    };
-
-    struct polynomial {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::polynomial> >> lexy::dsl::eof;
-    };
-
-    struct basic_function {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::basic_function> >> lexy::dsl::eof;
-    };
-
-    struct basic_functions_chain {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::basic_functions_chain> >> lexy::dsl::eof;
-    };
-
-    struct intermediate_function {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::intermediate_function> >> lexy::dsl::eof;
-    };
-
-    struct intermediate_functions_chain {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::intermediate_functions_chain> >> lexy::dsl::eof;
-    };
-
-    struct advanced_function {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::advanced_function> >> lexy::dsl::eof;
-    };
-
-    struct advanced_functions_chain {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::advanced_functions_chain> >> lexy::dsl::eof;
-    };
-
-    struct fun_of_advanced_functions_chain {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::fun_of_advanced_functions_chain> >> lexy::dsl::eof;
-    };
-
-    struct expression {
-        static constexpr auto rule =
-                lexy::dsl::p<az::grammar::function> >> lexy::dsl::eof;
-    };
+    WRAP(atom);
+    WRAP(polynomial);
+    WRAP(basic_function);
+    WRAP(basic_functions_chain);
+    WRAP(intermediate_function);
+    WRAP(intermediate_functions_chain);
+    WRAP(advanced_function);
+    WRAP(advanced_functions_chain);
+    WRAP(fun_of_advanced_functions_chain);
+    WRAP(expression);
 }
 
 TEST(GrammarTest, Atom) {
