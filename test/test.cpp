@@ -10,6 +10,7 @@
 #define WRAP(x) struct x {static constexpr auto rule = lexy::dsl::p<az::grammar::x> >> lexy::dsl::eof;}
 
 namespace test{
+    WRAP(number);
     WRAP(atom);
     WRAP(polynomial);
     WRAP(basic_function);
@@ -20,6 +21,20 @@ namespace test{
     WRAP(advanced_functions_chain);
     WRAP(fun_of_advanced_functions_chain);
     WRAP(expression);
+}
+
+TEST(GrammarTest, Number) {
+    auto number = lexy::zstring_input("5");
+    auto fraction = lexy::zstring_input("5.2");
+    auto zero = lexy::zstring_input("0");
+    auto notWhole = lexy::zstring_input("0.2566");
+    auto big = lexy::zstring_input("3546532.37264572");
+
+    EXPECT_EQ(lexy::match<test::number>(number), true);
+    EXPECT_EQ(lexy::match<test::number>(fraction), true);
+    EXPECT_EQ(lexy::match<test::number>(zero), true);
+    EXPECT_EQ(lexy::match<test::number>(notWhole), true);
+    EXPECT_EQ(lexy::match<test::number>(big), true);
 }
 
 TEST(GrammarTest, Atom) {
