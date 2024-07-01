@@ -11,6 +11,7 @@
 
 namespace test{
     WRAP(number);
+    WRAP(addition);
     WRAP(atom);
     WRAP(polynomial);
     WRAP(basic_function);

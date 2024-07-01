@@ -15,5 +15,7 @@ function_kw -> sin | cos | tan | cot | sqrt | cbrt
 
 number -> (([1-9][0-9]*)|0)(\.[0-9]*)?
 atom -> "x"
-addition -> addition+addition | atom | number
+atomic -> atom | number
+addition -> atomic addition_p
+addition_p -> "+" atomic addition_p | atomic
 ```
