@@ -38,6 +38,20 @@ TEST(GrammarTest, Number) {
     EXPECT_EQ(lexy::match<test::number>(big), true);
 }
 
+TEST(GrammarTest, Addition) {
+    auto number = lexy::zstring_input("5");
+    auto x = lexy::zstring_input("x");
+    auto sumOfNumbers = lexy::zstring_input("3.24+5");
+    auto sumOfXs = lexy::zstring_input("x+x+x");
+    auto sum = lexy::zstring_input("x+5.223+x+4+0+x+x");
+
+    EXPECT_EQ(lexy::match<test::addition>(number), true);
+    EXPECT_EQ(lexy::match<test::addition>(x), true);
+    EXPECT_EQ(lexy::match<test::addition>(sumOfNumbers), true);
+    EXPECT_EQ(lexy::match<test::addition>(sumOfXs), true);
+    EXPECT_EQ(lexy::match<test::addition>(sum), true);
+}
+
 TEST(GrammarTest, Atom) {
     auto single = lexy::zstring_input("x");
     auto multiply = lexy::zstring_input("2x");

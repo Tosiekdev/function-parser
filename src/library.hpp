@@ -75,13 +75,13 @@ namespace az { namespace { namespace grammar {
         static constexpr auto rule = dsl::p<number> | dsl::p<atom2>;
     };
 
-    struct addition {
+    struct addition_p {
         static constexpr auto rule =
-                dsl::lit_c<'+'> >> dsl::p<atomic> >> dsl::recurse<addition> | dsl::eof;
+                dsl::lit_c<'+'> >> dsl::p<atomic> >> dsl::recurse<addition_p> | dsl::eof;
     };
 
-    struct addition_p {
-        static constexpr auto rule = dsl::p<atomic> >> dsl::p<addition>;
+    struct addition {
+        static constexpr auto rule = dsl::p<atomic> >> dsl::p<addition_p>;
     };
 
 
