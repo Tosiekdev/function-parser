@@ -11,8 +11,9 @@
 
 namespace test{
     WRAP(number);
-    WRAP(addition);
     WRAP(atom);
+    WRAP(addition);
+    WRAP(multiplication);
     WRAP(polynomial);
     WRAP(basic_function);
     WRAP(basic_functions_chain);
@@ -38,6 +39,19 @@ TEST(GrammarTest, Number) {
     EXPECT_EQ(lexy::match<test::number>(big), true);
 }
 
+TEST(GrammarTest, Atom) {
+    auto single = lexy::zstring_input("x");
+    auto multiply = lexy::zstring_input("2x");
+    auto power = lexy::zstring_input("x^5");
+    auto combined = lexy::zstring_input("2x^3");
+    auto number = lexy::zstring_input("3.14159");
+    EXPECT_EQ(lexy::match<test::atom>(single), true);
+    EXPECT_EQ(lexy::match<test::atom>(multiply), true);
+    EXPECT_EQ(lexy::match<test::atom>(power), true);
+    EXPECT_EQ(lexy::match<test::atom>(combined), true);
+    EXPECT_EQ(lexy::match<test::atom>(number), true);
+}
+
 TEST(GrammarTest, Addition) {
     auto number = lexy::zstring_input("5");
     auto x = lexy::zstring_input("x");
@@ -52,17 +66,18 @@ TEST(GrammarTest, Addition) {
     EXPECT_EQ(lexy::match<test::addition>(sum), true);
 }
 
-TEST(GrammarTest, Atom) {
-    auto single = lexy::zstring_input("x");
-    auto multiply = lexy::zstring_input("2x");
-    auto power = lexy::zstring_input("x^5");
-    auto combined = lexy::zstring_input("2x^3");
-    auto number = lexy::zstring_input("3.14159");
-    EXPECT_EQ(lexy::match<test::atom>(single), true);
-    EXPECT_EQ(lexy::match<test::atom>(multiply), true);
-    EXPECT_EQ(lexy::match<test::atom>(power), true);
-    EXPECT_EQ(lexy::match<test::atom>(combined), true);
-    EXPECT_EQ(lexy::match<test::atom>(number), true);
+TEST(GrammarTest, Multiplication) {
+    auto number = lexy::zstring_input("5");
+    auto x = lexy::zstring_input("x");
+    auto multOfNumbers = lexy::zstring_input("3.24*5");
+    auto multOfXs = lexy::zstring_input("x*x*x");
+    auto mult = lexy::zstring_input("x*5.223*x*4*0*x*x");
+
+    EXPECT_EQ(lexy::match<test::multiplication>(number), true);
+    EXPECT_EQ(lexy::match<test::multiplication>(x), true);
+    EXPECT_EQ(lexy::match<test::multiplication>(multOfNumbers), true);
+    EXPECT_EQ(lexy::match<test::multiplication>(multOfXs), true);
+    EXPECT_EQ(lexy::match<test::multiplication>(mult), true);
 }
 
 TEST(GrammarTest, Polynomial) {

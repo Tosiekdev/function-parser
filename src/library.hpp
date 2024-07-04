@@ -84,6 +84,15 @@ namespace az { namespace { namespace grammar {
         static constexpr auto rule = dsl::p<atomic> >> dsl::p<addition_p>;
     };
 
+    struct multiplication_p {
+        static constexpr auto rule =
+                dsl::lit_c<'*'> >> dsl::p<atomic> >> dsl::recurse<multiplication_p> | dsl::eof;
+    };
+
+    struct multiplication {
+        static constexpr auto rule = dsl::p<atomic> >> dsl::p<multiplication_p>;
+    };
+
 
     struct polynomial {
         static constexpr auto rule =
