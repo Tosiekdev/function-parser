@@ -18,4 +18,6 @@ atom -> "x"
 atomic -> atom | number
 addition -> atomic addition_p
 addition_p -> "+" atomic addition_p | atomic
+multiplication -> atomic multiplication_p
+multiplication_p -> "+" atomic multiplication_p | atomic
 ```
