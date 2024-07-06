@@ -20,4 +20,6 @@ addition -> atomic addition_p
 addition_p -> "+" atomic addition_p | atomic
 multiplication -> atomic multiplication_p
 multiplication_p -> "+" atomic multiplication_p | atomic
+exponentiation -> atomic exponentiation_p
+exponentiation_p -> "+" atomic exponentiation_p | atomic
 ```
