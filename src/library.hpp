@@ -11,8 +11,7 @@ namespace az { namespace { namespace grammar {
         static constexpr auto atom= [] {
             auto integer= dsl::digits<>.no_leading_zero();
             auto fraction= dsl::digits<>;
-
-            return integer >> dsl::if_(dsl::period >> fraction) | dsl::lit_c<'x'>;
+            return dsl::lit<"sin"> >> dsl::parenthesized(dsl::recurse<production>) | integer >> dsl::if_(dsl::period >> fraction) | dsl::lit_c<'x'>;
         }();
 
         struct power : dsl::infix_op_left {
