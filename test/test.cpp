@@ -17,8 +17,18 @@ TEST(GrammarTest, Addition) {
     EXPECT_TRUE(lexy::match<az::grammar::production>(additionOfXes));
 }
 
-TEST(GrammarTest, Sine) {
+TEST(GrammarTest, FunctionKeywords) {
     auto sine = lexy::zstring_input("sin(x)");
+    auto cosine = lexy::zstring_input("cos(x)");
+    auto tangent = lexy::zstring_input("tan(x)");
+    auto cotangent = lexy::zstring_input("cot(x)");
+    auto squareRoot = lexy::zstring_input("sqrt(x)");
+    auto cubeRoot = lexy::zstring_input("cbrt(x)");
 
     EXPECT_TRUE(lexy::match<az::grammar::production>(sine));
+    EXPECT_TRUE(lexy::match<az::grammar::production>(cosine));
+    EXPECT_TRUE(lexy::match<az::grammar::production>(tangent));
+    EXPECT_TRUE(lexy::match<az::grammar::production>(cotangent));
+    EXPECT_TRUE(lexy::match<az::grammar::production>(squareRoot));
+    EXPECT_TRUE(lexy::match<az::grammar::production>(cubeRoot));
 }

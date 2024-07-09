@@ -11,7 +11,9 @@ namespace az { namespace { namespace grammar {
         static constexpr auto atom= [] {
             auto integer= dsl::digits<>.no_leading_zero();
             auto fraction= dsl::digits<>;
-            return dsl::lit<"sin"> >> dsl::parenthesized(dsl::recurse<production>) | integer >> dsl::if_(dsl::period >> fraction) | dsl::lit_c<'x'>;
+            auto functionKw = dsl::lit<"sin">
+                    | dsl::lit<"cos"> | dsl::lit<"tan"> | dsl::lit<"cot"> | dsl::lit<"sqrt"> | dsl::lit<"cbrt">;
+            return functionKw >> dsl::parenthesized(dsl::recurse<production>) | integer >> dsl::if_(dsl::period >> fraction) | dsl::lit_c<'x'>;
         }();
 
         struct power : dsl::infix_op_left {
