@@ -2,9 +2,32 @@
 #define FUNCTION_PARSER_LIBRARY_HPP
 
 #include <lexy/dsl.hpp>
+#include <lexy/callback.hpp>
 
 namespace az { namespace { namespace grammar {
     namespace dsl = lexy::dsl;
+
+    struct Number {
+        Number(const std::string& i, const std::optional<std::string>& f) :
+            value(f ? std::stod(i+"."+*f) : std::stod(i)) {}
+        double value;
+    };
+
+    struct number {
+        struct integer {
+            static constexpr auto rule = dsl::capture(dsl::digits<>.no_leading_zero());
+            static constexpr auto value = lexy::as_string<std::string>;
+        };
+
+        struct fraction {
+            static constexpr auto rule = dsl::capture(dsl::digits<>);
+            static constexpr auto value = lexy::as_string<std::string>;
+        };
+
+        static constexpr auto rule = dsl::p<integer> >> dsl::opt(dsl::period >> dsl::p<fraction>);
+
+        static constexpr auto value = lexy::construct<Number>;
+    };
 
     struct production : lexy::expression_production {
         static constexpr auto whitespace = dsl::ascii::space;
