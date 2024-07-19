@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.29)
 project(function-parser)
 enable_testing()
-add_executable(parser_test test.cpp)
+add_executable(parser_test GrammarTest.cpp
+        ParsingTest.cpp)
 set_property(TARGET parser_test PROPERTY CXX_STANDARD 20)
 
 include(FetchContent)
