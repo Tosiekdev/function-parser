@@ -5,15 +5,128 @@
 #include <lexy/callback.hpp>
 #include <lexy/token.hpp>
 
+#include <cmath>
+
 namespace az {
-    struct Number {
+    struct Production {
+        [[nodiscard]] virtual double evaluate(double x) = 0;
+    };
+
+    struct Number : Production {
         Number(const std::string& i, const std::optional<std::string>& f) :
                 value(f ? std::stod(i+"."+*f) : std::stod(i)) {}
         double value;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return value;
+        }
     };
 
-    struct X {
-        double value;
+    struct X : Production {
+        [[nodiscard]] double evaluate(double x) override {
+            return x;
+        }
+    };
+
+    struct Sin : Production {
+        std::shared_ptr<Production> prod;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return std::sin(prod->evaluate(x));
+        }
+    };
+
+    struct Cos : Production {
+        std::shared_ptr<Production> prod;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return std::cos(prod->evaluate(x));
+        }
+    };
+
+    struct Tan : Production {
+        std::shared_ptr<Production> prod;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return std::tan(prod->evaluate(x));
+        }
+    };
+
+    struct Cot : Production {
+        std::shared_ptr<Production> prod;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return std::sin(prod->evaluate(x)) / std::sin(prod->evaluate(x));
+        }
+    };
+
+    struct Sqrt : Production {
+        std::shared_ptr<Production> prod;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return std::sqrt(prod->evaluate(x));
+        }
+    };
+
+    struct Cbrt : Production {
+        std::shared_ptr<Production> prod;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return std::cbrt(prod->evaluate(x));
+        }
+    };
+
+    struct Negative : Production {
+        std::shared_ptr<Production> prod;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return -prod->evaluate(x);
+        }
+    };
+
+    struct Pow : Production {
+        std::shared_ptr<Production> lhs;
+        std::shared_ptr<Production> rhs;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return std::pow(lhs->evaluate(x), rhs->evaluate(x));
+        }
+    };
+
+    struct Mul : Production {
+        std::shared_ptr<Production> lhs;
+        std::shared_ptr<Production> rhs;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return lhs->evaluate(x) * rhs->evaluate(x);
+        }
+    };
+
+    struct Div : Production {
+        std::shared_ptr<Production> lhs;
+        std::shared_ptr<Production> rhs;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return lhs->evaluate(x) / rhs->evaluate(x);
+        }
+    };
+
+    struct Plus : Production {
+        std::shared_ptr<Production> lhs;
+        std::shared_ptr<Production> rhs;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return lhs->evaluate(x) + rhs->evaluate(x);
+        }
+    };
+
+    struct Minus : Production {
+        std::shared_ptr<Production> lhs;
+        std::shared_ptr<Production> rhs;
+
+        [[nodiscard]] double evaluate(double x) override {
+            return lhs->evaluate(x) - rhs->evaluate(x);
+        }
     };
 
     namespace { namespace grammar {
@@ -72,8 +185,6 @@ namespace az {
 
         static constexpr auto whitespace = dsl::ascii::space;
         static constexpr auto atom= [] {
-//            auto functionKw =
-//                    | dsl::lit<"cos"> | dsl::lit<"tan"> | dsl::lit<"cot"> | dsl::lit<"sqrt"> | dsl::lit<"cbrt">;
             auto function =
                     dsl::p<sin> | dsl::p<cos> | dsl::p<tan> | dsl::p<cot> | dsl::p<sqrt> | dsl::p<cbrt>;
             return function | dsl::p<number> | dsl::p<x>;
