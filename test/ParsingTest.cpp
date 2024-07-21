@@ -17,15 +17,31 @@ TEST(ParsingTest, ParseNumber) {
     auto integerResult = lexy::parse<az::grammar::number>(integer, lexy_ext::report_error);
     auto decimalResult = lexy::parse<az::grammar::number>(decimal, lexy_ext::report_error);
     ASSERT_TRUE(integerResult.has_value());
-    EXPECT_DOUBLE_EQ(az::Number(integerResult.value()).evaluate(0), 5.0);
+    EXPECT_DOUBLE_EQ(integerResult.value()->evaluate(0), 5.0);
     ASSERT_TRUE(decimalResult.has_value());
-    EXPECT_DOUBLE_EQ(az::Number(decimalResult.value()).evaluate(0), 3.14);
+    EXPECT_DOUBLE_EQ(decimalResult.value()->evaluate(0), 3.14);
 }
 
 TEST(ParsingTest, ParseX) {
     auto var = lexy::zstring_input("x");
     auto result = lexy::parse<az::grammar::x>(var, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
-    az::X value = result.value();
-    EXPECT_EQ(value.evaluate(3.14), 3.14);
+    auto value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), 3.14);
+}
+
+TEST(ParsingTest, ParseProduction) {
+    auto var = lexy::zstring_input("x");
+    auto result = lexy::parse<az::grammar::production>(var, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), 3.14);
+}
+
+TEST(ParsingTest, Sine) {
+    auto exp = lexy::zstring_input("sin(x)");
+    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), std::sin(3.14));
 }
