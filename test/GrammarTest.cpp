@@ -6,7 +6,7 @@
 
 #include <lexy/input/string_input.hpp>
 
-#include "../src/library.hpp"
+#include "../include/az_math/function_parser.hpp"
 
 TEST(GrammarTest, Addition) {
     auto addition = lexy::zstring_input("x+5");

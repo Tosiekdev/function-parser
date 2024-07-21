@@ -15,6 +15,6 @@ FetchContent_MakeAvailable(lexy)
 FetchContent_MakeAvailable(googletest)
 
 target_link_libraries(parser_test GTest::gtest_main foonathan::lexy)
-target_include_directories(parser_test PRIVATE ../src)
+target_include_directories(parser_test PRIVATE ../include)
 include(GoogleTest)
 gtest_discover_tests(parser_test)

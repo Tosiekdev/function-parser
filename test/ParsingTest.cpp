@@ -9,7 +9,7 @@
 #include <lexy/input/string_input.hpp>
 #include <lexy_ext/report_error.hpp>
 
-#include "../src/library.hpp"
+#include "../include/az_math/function_parser.hpp"
 
 TEST(ParsingTest, ParseNumber) {
     auto integer = lexy::zstring_input("5");

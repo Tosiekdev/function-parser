@@ -1,5 +1,5 @@
-#ifndef FUNCTION_PARSER_LIBRARY_HPP
-#define FUNCTION_PARSER_LIBRARY_HPP
+#ifndef FUNCTION_PARSER_FUNCTION_PARSER_HPP
+#define FUNCTION_PARSER_FUNCTION_PARSER_HPP
 
 #include <lexy/dsl.hpp>
 #include <lexy/callback.hpp>
@@ -271,4 +271,4 @@ namespace az {
     };
 }}} // namespace az::<anonymous>::grammar
 
-#endif //FUNCTION_PARSER_LIBRARY_HPP
+#endif //FUNCTION_PARSER_FUNCTION_PARSER_HPP
