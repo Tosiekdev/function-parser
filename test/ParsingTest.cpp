@@ -85,3 +85,11 @@ TEST(ParsingTest, Subtraction) {
     const std::shared_ptr<az::Production>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), 3.14-5);
 }
+
+TEST(ParsingTest, OperatorPrecedence) {
+    auto exp = lexy::zstring_input("(2+5)*2+3*5^2");
+    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), 89);
+}

@@ -226,7 +226,7 @@ namespace az {
         static constexpr auto atom= [] {
             auto function =
                     dsl::p<sin> | dsl::p<cos> | dsl::p<tan> | dsl::p<cot> | dsl::p<sqrt> | dsl::p<cbrt>;
-            return function | dsl::p<number> | dsl::p<x>;
+            return function | dsl::p<number> | dsl::p<x> | dsl::parenthesized(dsl::p<production>);
         }();
 
         struct power : dsl::infix_op_left {
@@ -251,14 +251,15 @@ namespace az {
 
         using operation = sum;
         static constexpr auto value = lexy::callback<std::shared_ptr<Production>>(
-                [](std::shared_ptr<Number> e) {return e;},
-                [](std::shared_ptr<X> e) {return e;},
-                [](std::shared_ptr<Sin> e) {return e;},
-                [](std::shared_ptr<Cos> e) {return e;},
-                [](std::shared_ptr<Tan> e) {return e;},
-                [](std::shared_ptr<Cot> e) {return e;},
-                [](std::shared_ptr<Sqrt> e) {return e;},
-                [](std::shared_ptr<Cbrt> e) {return e;},
+                [](std::shared_ptr<Number> e) { return e; },
+                [](std::shared_ptr<X> e) { return e; },
+                [](std::shared_ptr<Sin> e) { return e; },
+                [](std::shared_ptr<Cos> e) { return e; },
+                [](std::shared_ptr<Tan> e) { return e; },
+                [](std::shared_ptr<Cot> e) { return e; },
+                [](std::shared_ptr<Sqrt> e) { return e; },
+                [](std::shared_ptr<Cbrt> e) { return e; },
+                [](std::shared_ptr<Production> e) {return e;},
                 [](lexy::op<op_minus>, const std::shared_ptr<Production>& e) {
                     return std::make_shared<Negative>(e);
                     },
