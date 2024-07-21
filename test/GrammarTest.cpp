@@ -13,9 +13,9 @@ TEST(GrammarTest, Addition) {
     auto additionOfNums = lexy::zstring_input("0.34+5+6.34");
     auto additionOfXes = lexy::zstring_input("x+x+x+x+x+x+x");
 
-    EXPECT_TRUE(lexy::match<az::grammar::production>(addition));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(additionOfNums));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(additionOfXes));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(addition));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(additionOfNums));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(additionOfXes));
 }
 
 TEST(GrammarTest, Subtraction) {
@@ -23,9 +23,9 @@ TEST(GrammarTest, Subtraction) {
     auto subtractionOfNums = lexy::zstring_input("0.34-5-6.34");
     auto subtractionOfXes = lexy::zstring_input("x-x-x-x-x-x-x");
 
-    EXPECT_TRUE(lexy::match<az::grammar::production>(subtraction));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(subtractionOfNums));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(subtractionOfXes));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(subtraction));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(subtractionOfNums));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(subtractionOfXes));
 }
 
 TEST(GrammarTest, Multiplication) {
@@ -33,9 +33,9 @@ TEST(GrammarTest, Multiplication) {
     auto multiplicationOfNums = lexy::zstring_input("0.34*5*6.34");
     auto multiplicationOfXes = lexy::zstring_input("x*x*x*x*x*x*x");
 
-    EXPECT_TRUE(lexy::match<az::grammar::production>(multiplication));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(multiplicationOfNums));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(multiplicationOfXes));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(multiplication));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(multiplicationOfNums));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(multiplicationOfXes));
 }
 
 TEST(GrammarTest, Division) {
@@ -43,9 +43,9 @@ TEST(GrammarTest, Division) {
     auto divisionOfNums = lexy::zstring_input("0.34/5/6.34");
     auto divisionOfXes = lexy::zstring_input("x/x/x/x/x/x/x");
 
-    EXPECT_TRUE(lexy::match<az::grammar::production>(division));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(divisionOfNums));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(divisionOfXes));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(division));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(divisionOfNums));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(divisionOfXes));
 }
 
 TEST(GrammarTest, Exponentiation) {
@@ -53,9 +53,9 @@ TEST(GrammarTest, Exponentiation) {
     auto exponentiationOfNums = lexy::zstring_input("0.34^5^6.34");
     auto exponentiationOfXes = lexy::zstring_input("x^x^x^x^x^x^x");
 
-    EXPECT_TRUE(lexy::match<az::grammar::production>(exponentiation));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(exponentiationOfNums));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(exponentiationOfXes));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(exponentiation));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(exponentiationOfNums));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(exponentiationOfXes));
 }
 
 TEST(GrammarTest, FunctionKeywords) {
@@ -66,10 +66,10 @@ TEST(GrammarTest, FunctionKeywords) {
     auto squareRoot = lexy::zstring_input("sqrt(x)");
     auto cubeRoot = lexy::zstring_input("cbrt(x)");
 
-    EXPECT_TRUE(lexy::match<az::grammar::production>(sine));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(cosine));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(tangent));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(cotangent));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(squareRoot));
-    EXPECT_TRUE(lexy::match<az::grammar::production>(cubeRoot));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(sine));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(cosine));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(tangent));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(cotangent));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(squareRoot));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(cubeRoot));
 }

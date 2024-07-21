@@ -32,9 +32,9 @@ TEST(ParsingTest, ParseX) {
 
 TEST(ParsingTest, ParseProduction) {
     auto var = lexy::zstring_input("x");
-    auto result = lexy::parse<az::grammar::production>(var, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(var, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
-    const std::shared_ptr<az::Production>& value = result.value();
+    const std::shared_ptr<az::Expression>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), 3.14);
 }
 
@@ -45,12 +45,12 @@ TEST(ParsingTest, Functions) {
     auto cot = lexy::zstring_input("cot(x)");
     auto sqrt = lexy::zstring_input("sqrt(x)");
     auto cbrt = lexy::zstring_input("cbrt(x)");
-    auto result = lexy::parse<az::grammar::production>(sin, lexy_ext::report_error);
-    auto result1 = lexy::parse<az::grammar::production>(cos, lexy_ext::report_error);
-    auto result2 = lexy::parse<az::grammar::production>(tan, lexy_ext::report_error);
-    auto result3 = lexy::parse<az::grammar::production>(cot, lexy_ext::report_error);
-    auto result4 = lexy::parse<az::grammar::production>(sqrt, lexy_ext::report_error);
-    auto result5 = lexy::parse<az::grammar::production>(cbrt, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(sin, lexy_ext::report_error);
+    auto result1 = lexy::parse<az::grammar::expression>(cos, lexy_ext::report_error);
+    auto result2 = lexy::parse<az::grammar::expression>(tan, lexy_ext::report_error);
+    auto result3 = lexy::parse<az::grammar::expression>(cot, lexy_ext::report_error);
+    auto result4 = lexy::parse<az::grammar::expression>(sqrt, lexy_ext::report_error);
+    auto result5 = lexy::parse<az::grammar::expression>(cbrt, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
     ASSERT_TRUE(result1.has_value());
     ASSERT_TRUE(result2.has_value());
@@ -67,49 +67,49 @@ TEST(ParsingTest, Functions) {
 
 TEST(ParsingTest, Exponentitation) {
     auto exp = lexy::zstring_input("x^5");
-    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(exp, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
-    const std::shared_ptr<az::Production>& value = result.value();
+    const std::shared_ptr<az::Expression>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), std::pow(3.14, 5));
 }
 
 TEST(ParsingTest, Multiplication) {
     auto exp = lexy::zstring_input("x*5");
-    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(exp, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
-    const std::shared_ptr<az::Production>& value = result.value();
+    const std::shared_ptr<az::Expression>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), 3.14*5);
 }
 
 TEST(ParsingTest, Division) {
     auto exp = lexy::zstring_input("x/5");
-    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(exp, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
-    const std::shared_ptr<az::Production>& value = result.value();
+    const std::shared_ptr<az::Expression>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), 3.14/5);
 }
 
 TEST(ParsingTest, Addition) {
     auto exp = lexy::zstring_input("x+5");
-    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(exp, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
-    const std::shared_ptr<az::Production>& value = result.value();
+    const std::shared_ptr<az::Expression>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), 3.14+5);
 }
 
 TEST(ParsingTest, Subtraction) {
     auto exp = lexy::zstring_input("x-5");
-    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(exp, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
-    const std::shared_ptr<az::Production>& value = result.value();
+    const std::shared_ptr<az::Expression>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), 3.14-5);
 }
 
 TEST(ParsingTest, OperatorPrecedence) {
     auto exp = lexy::zstring_input("(2+5)*2+3*5^2");
     auto expWithX = lexy::zstring_input("(2+x)*2+3*x^x");
-    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
-    auto result2 = lexy::parse<az::grammar::production>(expWithX, lexy_ext::report_error);
+    auto result = lexy::parse<az::grammar::expression>(exp, lexy_ext::report_error);
+    auto result2 = lexy::parse<az::grammar::expression>(expWithX, lexy_ext::report_error);
     ASSERT_TRUE(result.has_value());
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result.value()->evaluate(3.14), (2+5)*2+3*std::pow(5,2));
