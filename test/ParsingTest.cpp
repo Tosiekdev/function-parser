@@ -45,3 +45,43 @@ TEST(ParsingTest, Sine) {
     const std::shared_ptr<az::Production>& value = result.value();
     EXPECT_EQ(value->evaluate(3.14), std::sin(3.14));
 }
+
+TEST(ParsingTest, Exponentitation) {
+    auto exp = lexy::zstring_input("x^5");
+    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), std::pow(3.14, 5));
+}
+
+TEST(ParsingTest, Multiplication) {
+    auto exp = lexy::zstring_input("x*5");
+    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), 3.14*5);
+}
+
+TEST(ParsingTest, Division) {
+    auto exp = lexy::zstring_input("x/5");
+    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), 3.14/5);
+}
+
+TEST(ParsingTest, Addition) {
+    auto exp = lexy::zstring_input("x+5");
+    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), 3.14+5);
+}
+
+TEST(ParsingTest, Subtraction) {
+    auto exp = lexy::zstring_input("x-5");
+    auto result = lexy::parse<az::grammar::production>(exp, lexy_ext::report_error);
+    ASSERT_TRUE(result.has_value());
+    const std::shared_ptr<az::Production>& value = result.value();
+    EXPECT_EQ(value->evaluate(3.14), 3.14-5);
+}

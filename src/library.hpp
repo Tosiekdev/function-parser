@@ -180,6 +180,12 @@ namespace az {
     template<typename T>
     auto callback = [](std::shared_ptr<Production> p){ return std::make_shared<T>(p); };
 
+    template<typename Op, typename T>
+    auto binOperatorCallback =
+            [](const std::shared_ptr<Production>& l, Op, const std::shared_ptr<Production>& r){
+                return std::make_shared<T>(l, r);
+            };
+
     constexpr auto op_plus  = dsl::op(dsl::lit_c<'+'>);
     constexpr auto op_minus = dsl::op(dsl::lit_c<'-'>);
     constexpr auto op_mul  = dsl::op(dsl::lit_c<'*'>);
@@ -256,21 +262,11 @@ namespace az {
                 [](lexy::op<op_minus>, const std::shared_ptr<Production>& e) {
                     return std::make_shared<Negative>(e);
                     },
-                [](const std::shared_ptr<Production>& l, lexy::op<op_pow>, const std::shared_ptr<Production>& r){
-                    return std::make_shared<Pow>(l, r);
-                },
-                [](const std::shared_ptr<Production>& l, lexy::op<op_mul>, const std::shared_ptr<Production>& r){
-                    return std::make_shared<Mul>(l, r);
-                },
-                [](const std::shared_ptr<Production>& l, lexy::op<op_div>, const std::shared_ptr<Production>& r){
-                    return std::make_shared<Div>(l, r);
-                },
-                [](const std::shared_ptr<Production>& l, lexy::op<op_plus>, const std::shared_ptr<Production>& r){
-                    return std::make_shared<Plus>(l, r);
-                },
-                [](const std::shared_ptr<Production>& l, lexy::op<op_minus>, const std::shared_ptr<Production>& r){
-                    return std::make_shared<Minus>(l, r);
-                });
+                binOperatorCallback<lexy::op<op_pow>, Pow>,
+                binOperatorCallback<lexy::op<op_mul>, Mul>,
+                binOperatorCallback<lexy::op<op_div>, Div>,
+                binOperatorCallback<lexy::op<op_plus>, Plus>,
+                binOperatorCallback<lexy::op<op_minus>, Minus>);
     };
 }}} // namespace az::<anonymous>::grammar
 
