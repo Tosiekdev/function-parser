@@ -273,6 +273,7 @@ namespace az {
                 binOperatorCallback<lexy::op<op_plus>, Plus>,
                 binOperatorCallback<lexy::op<op_minus>, Minus>);
     };
-}}} // namespace az::<anonymous>::grammar
+}} // namespace az::<anonymous>::grammar
+} // namespace az
 
 #endif //FUNCTION_PARSER_FUNCTION_PARSER_HPP
