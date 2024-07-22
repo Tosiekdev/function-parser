@@ -4,8 +4,13 @@
 #include <lexy/dsl.hpp>
 #include <lexy/callback.hpp>
 #include <lexy/token.hpp>
+#include <lexy/action/parse.hpp>
+#include <lexy/input/string_input.hpp>
+
+#include <lexy_ext/report_error.hpp>
 
 #include <cmath>
+#include <optional>
 #include <utility>
 
 namespace az {
@@ -273,7 +278,17 @@ namespace az {
                 binOperatorCallback<lexy::op<op_plus>, Plus>,
                 binOperatorCallback<lexy::op<op_minus>, Minus>);
     };
-}} // namespace az::<anonymous>::grammar
+    }} // namespace az::<anonymous>::grammar
+
+    inline std::shared_ptr<Expression> parse_expression(const std::string& input) {
+        const auto exp = lexy::string_input(input);
+        const auto result =
+                lexy::parse<az::grammar::expression>(exp, lexy_ext::report_error);
+
+        if (!result.has_value())
+            return nullptr;
+        return result.value();
+    }
 } // namespace az
 
 #endif //FUNCTION_PARSER_FUNCTION_PARSER_HPP
