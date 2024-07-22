@@ -238,7 +238,7 @@ namespace az {
             return function | dsl::p<number> | dsl::p<x> | dsl::parenthesized(dsl::p<expression>);
         }();
 
-        struct power : dsl::infix_op_left {
+        struct power : dsl::infix_op_right {
             static constexpr auto op = op_pow;
             using operand = dsl::atom;
         };

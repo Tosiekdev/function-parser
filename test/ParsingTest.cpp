@@ -48,8 +48,11 @@ TEST(ParsingTest, Functions) {
 
 TEST(ParsingTest, Exponentitation) {
     auto result = az::parse_expression("x^5");
+    auto result2 = az::parse_expression("x^5^5");
     ASSERT_TRUE(result);
     EXPECT_EQ(result->evaluate(3.14), std::pow(3.14, 5));
+    ASSERT_TRUE(result2);
+    EXPECT_EQ(result2->evaluate(3.14), std::pow(3.14, std::pow(5, 5)));
 }
 
 TEST(ParsingTest, Multiplication) {
@@ -60,8 +63,11 @@ TEST(ParsingTest, Multiplication) {
 
 TEST(ParsingTest, Division) {
     auto result = az::parse_expression("x/5");
+    auto result2 = az::parse_expression("x/5/5");
     ASSERT_TRUE(result);
     EXPECT_EQ(result->evaluate(3.14), 3.14 / 5);
+    ASSERT_TRUE(result2);
+    EXPECT_EQ(result2->evaluate(3.14), 3.14 / 5 / 5);
 }
 
 TEST(ParsingTest, Addition) {
