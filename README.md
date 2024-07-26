@@ -4,6 +4,19 @@
 This header only library provides interface for parsing mathematical
 functions of one variable.
 
+## Installation
+Library itself is (one) header only, so the easiest way is just putting
+it into your project. However, it depends on 
+[lexy](https://github.com/foonathan/lexy) parsing library. Author of 
+lexy suggests adding following lines to cmake to make everything work.
+```cmake
+include(FetchContent)
+FetchContent_Declare(lexy URL https://lexy.foonathan.net/download/lexy-src.zip)
+
+FetchContent_MakeAvailable(lexy)
+target_link_libraries(project_name foonathan::lexy)
+```
+
 ## Usage
 To use this library you only have to include `function_parser.hpp` in 
 your project.
