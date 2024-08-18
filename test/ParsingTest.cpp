@@ -2,13 +2,11 @@
 // Created by tosiek on 19.07.24.
 //
 
+#include <az_math/function_parser.hpp>
 #include <gtest/gtest.h>
 
-#include <lexy/action/parse.hpp>
-#include <lexy/dsl.hpp>
-#include <lexy_ext/report_error.hpp>
-
-#include "../include/az_math/function_parser.hpp"
+#include "lexy/dsl.hpp"
+#include "lexy_ext/report_error.hpp"
 
 TEST(ParsingTest, ParseNumber) {
     auto integerResult = az::parse_expression("5");
@@ -89,4 +87,9 @@ TEST(ParsingTest, OperatorPrecedence) {
     EXPECT_EQ(result->evaluate(3.14), (2+5)*2+3*std::pow(5,2));
     ASSERT_TRUE(result2);
     EXPECT_EQ(result2->evaluate(3.14), (2+3.14)*2+3*std::pow(3.14,3.14));
+}
+
+TEST(ParsingTest, InvalidFunction) {
+    auto result = az::parse_expression("2x");
+    ASSERT_FALSE(result);
 }
