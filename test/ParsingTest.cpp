@@ -1,7 +1,3 @@
-//
-// Created by tosiek on 19.07.24.
-//
-
 #include <az_math/function_parser.hpp>
 #include <gtest/gtest.h>
 

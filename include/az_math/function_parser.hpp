@@ -27,7 +27,7 @@ namespace az {
 
         double value;
 
-        [[nodiscard]] double evaluate(double x) override {
+        [[nodiscard]] double evaluate(const double x) override {
             return value;
         }
     };
@@ -35,7 +35,7 @@ namespace az {
     struct X : Expression {
         X() = default;
 
-        [[nodiscard]] double evaluate(double x) override {
+        [[nodiscard]] double evaluate(const double x) override {
             return x;
         }
     };
@@ -45,8 +45,9 @@ namespace az {
         };
         std::shared_ptr<Expression> prod;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return std::sin(prod->evaluate(x));
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            return std::isnan(t) ? t : std::sin(t);
         }
     };
 
@@ -55,8 +56,9 @@ namespace az {
         };
         std::shared_ptr<Expression> prod;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return std::cos(prod->evaluate(x));
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            return std::isnan(t) ? t : std::cos(t);
         }
     };
 
@@ -65,8 +67,9 @@ namespace az {
         };
         std::shared_ptr<Expression> prod;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return std::tan(prod->evaluate(x));
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            return std::isnan(t) ? t : std::tan(t);
         }
     };
 
@@ -75,8 +78,18 @@ namespace az {
         };
         std::shared_ptr<Expression> prod;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return std::cos(prod->evaluate(x)) / std::sin(prod->evaluate(x));
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            if (std::isnan(t)) {
+                return t;
+            }
+            const double sin = std::sin(t);
+
+            if (std::abs(sin) < 1e-10) {
+                return std::nan("");
+            }
+
+            return std::cos(t) / sin;
         }
     };
 
@@ -85,8 +98,13 @@ namespace az {
         };
         std::shared_ptr<Expression> prod;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return std::sqrt(prod->evaluate(x));
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            if (std::isnan(t)) {
+                return t;
+            }
+
+            return t < 0.0 ? std::nan("") : std::sqrt(t);
         }
     };
 
@@ -95,8 +113,9 @@ namespace az {
         };
         std::shared_ptr<Expression> prod;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return std::cbrt(prod->evaluate(x));
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            return std::isnan(t) ? t : std::cbrt(t);
         }
     };
 
@@ -105,8 +124,9 @@ namespace az {
         };
         std::shared_ptr<Expression> prod;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return -prod->evaluate(x);
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            return std::isnan(t) ? t : -prod->evaluate(x);
         }
     };
 
@@ -117,8 +137,11 @@ namespace az {
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return std::pow(lhs->evaluate(x), rhs->evaluate(x));
+        [[nodiscard]] double evaluate(const double x) override {
+            const double l = lhs->evaluate(x);
+            const double r = rhs->evaluate(x);
+
+            return std::isnan(l) || std::isnan(r) ? std::nan("") : std::pow(l, r);
         }
     };
 
@@ -129,8 +152,11 @@ namespace az {
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return lhs->evaluate(x) * rhs->evaluate(x);
+        [[nodiscard]] double evaluate(const double x) override {
+            const double l = lhs->evaluate(x);
+            const double r = rhs->evaluate(x);
+
+            return std::isnan(l) || std::isnan(r) ? std::nan("") : l * r;
         }
     };
 
@@ -141,8 +167,15 @@ namespace az {
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return lhs->evaluate(x) / rhs->evaluate(x);
+        [[nodiscard]] double evaluate(const double x) override {
+            const double l = lhs->evaluate(x);
+            const double r = rhs->evaluate(x);
+
+            if (std::isnan(l) || std::isnan(r)) {
+                return std::nan("");
+            }
+
+            return std::abs(r) > 1e-10 ? lhs->evaluate(x) / r : std::nan("");
         }
     };
 
@@ -153,8 +186,11 @@ namespace az {
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return lhs->evaluate(x) + rhs->evaluate(x);
+        [[nodiscard]] double evaluate(const double x) override {
+            const double l = lhs->evaluate(x);
+            const double r = rhs->evaluate(x);
+
+            return std::isnan(l) || std::isnan(r) ? std::nan("") : l + r;
         }
     };
 
@@ -165,8 +201,11 @@ namespace az {
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
-        [[nodiscard]] double evaluate(double x) override {
-            return lhs->evaluate(x) - rhs->evaluate(x);
+        [[nodiscard]] double evaluate(const double x) override {
+            const double l = lhs->evaluate(x);
+            const double r = rhs->evaluate(x);
+
+            return std::isnan(l) || std::isnan(r) ? std::nan("") : l - r;
         }
     };
 
@@ -188,7 +227,7 @@ namespace az {
                 static constexpr auto rule = dsl::p<integer> >> dsl::opt(dsl::period >> dsl::p<fraction>);
 
                 static constexpr auto value =
-                        lexy::callback<std::shared_ptr<Number> >(
+                        lexy::callback<std::shared_ptr<Number>>(
                             [](const std::string& i, const std::optional<std::string>& f) {
                                 return std::make_shared<Number>(i, f);
                             });
@@ -196,7 +235,7 @@ namespace az {
 
             struct x {
                 static constexpr auto rule = dsl::lit_c<'x'>;
-                static constexpr auto value = lexy::callback<std::shared_ptr<X> >([]() {
+                static constexpr auto value = lexy::callback<std::shared_ptr<X>>([]() {
                     return std::make_shared<X>();
                 });
             };
@@ -222,32 +261,32 @@ namespace az {
             struct expression : lexy::expression_production {
                 struct sin {
                     static constexpr auto rule = dsl::lit<"sin"> >> dsl::parenthesized(dsl::p<expression>);
-                    static constexpr auto value = lexy::callback<std::shared_ptr<Sin> >(callback<Sin>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Sin>>(callback<Sin>);
                 };
 
                 struct cos {
                     static constexpr auto rule = dsl::lit<"cos"> >> dsl::parenthesized(dsl::p<expression>);
-                    static constexpr auto value = lexy::callback<std::shared_ptr<Cos> >(callback<Cos>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Cos>>(callback<Cos>);
                 };
 
                 struct tan {
                     static constexpr auto rule = dsl::lit<"tan"> >> dsl::parenthesized(dsl::p<expression>);
-                    static constexpr auto value = lexy::callback<std::shared_ptr<Tan> >(callback<Tan>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Tan>>(callback<Tan>);
                 };
 
                 struct cot {
                     static constexpr auto rule = dsl::lit<"cot"> >> dsl::parenthesized(dsl::p<expression>);
-                    static constexpr auto value = lexy::callback<std::shared_ptr<Cot> >(callback<Cot>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Cot>>(callback<Cot>);
                 };
 
                 struct sqrt {
                     static constexpr auto rule = dsl::lit<"sqrt"> >> dsl::parenthesized(dsl::p<expression>);
-                    static constexpr auto value = lexy::callback<std::shared_ptr<Sqrt> >(callback<Sqrt>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Sqrt>>(callback<Sqrt>);
                 };
 
                 struct cbrt {
                     static constexpr auto rule = dsl::lit<"cbrt"> >> dsl::parenthesized(dsl::p<expression>);
-                    static constexpr auto value = lexy::callback<std::shared_ptr<Cbrt> >(callback<Cbrt>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Cbrt>>(callback<Cbrt>);
                 };
 
                 static constexpr auto whitespace = dsl::ascii::space;
@@ -278,7 +317,7 @@ namespace az {
                 };
 
                 using operation = sum;
-                static constexpr auto value = lexy::callback<std::shared_ptr<Expression> >(
+                static constexpr auto value = lexy::callback<std::shared_ptr<Expression>>(
                     forwardCallback<Number>,
                     forwardCallback<X>,
                     forwardCallback<Sin>,

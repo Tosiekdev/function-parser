@@ -1,7 +1,3 @@
-//
-// Created by tosiek on 18.02.24.
-//
-
 #include <gtest/gtest.h>
 
 #include <lexy/input/string_input.hpp>
