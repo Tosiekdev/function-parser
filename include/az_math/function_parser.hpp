@@ -126,6 +126,34 @@ namespace az {
         }
     };
 
+    struct Lg : Expression {
+        explicit Lg(std::shared_ptr<Expression> p) : prod(std::move(p)) {}
+
+        std::shared_ptr<Expression> prod;
+
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            if (t <= 0.0) {
+                return std::nan("");
+            }
+            return std::isnan(t) ? t : std::log2(t);
+        }
+    };
+
+    struct Log : Expression {
+        explicit Log(std::shared_ptr<Expression> p) : prod(std::move(p)) {}
+
+        std::shared_ptr<Expression> prod;
+
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            if (t <= 0.0) {
+                return std::nan("");
+            }
+            return std::isnan(t) ? t : std::log10(t);
+        }
+    };
+
     struct Negative : Expression {
         explicit Negative(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
@@ -295,11 +323,21 @@ namespace az {
                     static constexpr auto value = lexy::callback<std::shared_ptr<Ln>>(callback<Ln>);
                 };
 
+                struct lg {
+                    static constexpr auto rule = dsl::lit<"lg"> >> dsl::parenthesized(dsl::p<expression>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Lg>>(callback<Lg>);
+                };
+
+                struct log {
+                    static constexpr auto rule = dsl::lit<"log"> >> dsl::parenthesized(dsl::p<expression>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Log>>(callback<Log>);
+                };
+
                 static constexpr auto whitespace = dsl::ascii::space;
                 static constexpr auto atom = [] {
                     constexpr auto function =
                             dsl::p<sin> | dsl::p<cos> | dsl::p<tan> | dsl::p<cot> | dsl::p<sqrt> | dsl::p<cbrt>
-                            | dsl::p<ln>;
+                            | dsl::p<ln> | dsl::p<lg> | dsl::p<log>;
                     return function | dsl::p<number> | dsl::p<x> | dsl::parenthesized(dsl::p<expression>);
                 }();
 
@@ -334,6 +372,8 @@ namespace az {
                     forwardCallback<Sqrt>,
                     forwardCallback<Cbrt>,
                     forwardCallback<Ln>,
+                    forwardCallback<Lg>,
+                    forwardCallback<Log>,
                     forwardCallback<Expression>,
                     [](lexy::op<op_minus>, const std::shared_ptr<Expression>& e) {
                         return std::make_shared<Negative>(e);

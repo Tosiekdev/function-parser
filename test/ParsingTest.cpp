@@ -27,6 +27,8 @@ TEST(ParsingTest, Functions) {
     auto sqrt = az::parse_expression("sqrt(x)");
     auto cbrt = az::parse_expression("cbrt(x)");
     auto ln = az::parse_expression("ln(x)");
+    auto lg = az::parse_expression("lg(x)");
+    auto log = az::parse_expression("log(x)");
     ASSERT_TRUE(sin);
     EXPECT_DOUBLE_EQ(sin->evaluate(3.14), std::sin(3.14));
     ASSERT_TRUE(cos);
@@ -41,6 +43,10 @@ TEST(ParsingTest, Functions) {
     EXPECT_DOUBLE_EQ(cbrt->evaluate(3.14), std::cbrt(3.14));
     ASSERT_TRUE(ln);
     EXPECT_DOUBLE_EQ(ln->evaluate(3.14), std::log(3.14));
+    ASSERT_TRUE(lg);
+    EXPECT_DOUBLE_EQ(lg->evaluate(3.14), std::log2(3.14));
+    ASSERT_TRUE(log);
+    EXPECT_DOUBLE_EQ(log->evaluate(3.14), std::log10(3.14));
 }
 
 TEST(ParsingTest, Exponentitation) {

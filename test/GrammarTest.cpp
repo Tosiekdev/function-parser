@@ -62,6 +62,8 @@ TEST(GrammarTest, FunctionKeywords) {
     auto squareRoot = lexy::zstring_input("sqrt(x)");
     auto cubeRoot = lexy::zstring_input("cbrt(x)");
     auto ln = lexy::zstring_input("ln(x)");
+    auto lg = lexy::zstring_input("lg(x)");
+    auto log = lexy::zstring_input("log(x)");
 
     EXPECT_TRUE(lexy::match<az::grammar::expression>(sine));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(cosine));
@@ -70,4 +72,6 @@ TEST(GrammarTest, FunctionKeywords) {
     EXPECT_TRUE(lexy::match<az::grammar::expression>(squareRoot));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(cubeRoot));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(ln));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(lg));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(log));
 }
