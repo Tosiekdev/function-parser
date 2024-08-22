@@ -22,8 +22,7 @@ namespace az {
 
     struct Number : Expression {
         Number(const std::string& i, const std::optional<std::string>& f) : value(
-            f ? std::stod(i + "." + *f) : std::stod(i)) {
-        }
+            f ? std::stod(i + "." + *f) : std::stod(i)) {}
 
         double value;
 
@@ -41,8 +40,7 @@ namespace az {
     };
 
     struct Sin : Expression {
-        explicit Sin(std::shared_ptr<Expression> p) : prod(std::move(p)) {
-        };
+        explicit Sin(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
 
         [[nodiscard]] double evaluate(const double x) override {
@@ -52,8 +50,7 @@ namespace az {
     };
 
     struct Cos : Expression {
-        explicit Cos(std::shared_ptr<Expression> p) : prod(std::move(p)) {
-        };
+        explicit Cos(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
 
         [[nodiscard]] double evaluate(const double x) override {
@@ -63,8 +60,7 @@ namespace az {
     };
 
     struct Tan : Expression {
-        explicit Tan(std::shared_ptr<Expression> p) : prod(std::move(p)) {
-        };
+        explicit Tan(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
 
         [[nodiscard]] double evaluate(const double x) override {
@@ -74,8 +70,7 @@ namespace az {
     };
 
     struct Cot : Expression {
-        explicit Cot(std::shared_ptr<Expression> p) : prod(std::move(p)) {
-        };
+        explicit Cot(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
 
         [[nodiscard]] double evaluate(const double x) override {
@@ -94,8 +89,7 @@ namespace az {
     };
 
     struct Sqrt : Expression {
-        explicit Sqrt(std::shared_ptr<Expression> p) : prod(std::move(p)) {
-        };
+        explicit Sqrt(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
 
         [[nodiscard]] double evaluate(const double x) override {
@@ -109,8 +103,7 @@ namespace az {
     };
 
     struct Cbrt : Expression {
-        explicit Cbrt(std::shared_ptr<Expression> p) : prod(std::move(p)) {
-        };
+        explicit Cbrt(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
 
         [[nodiscard]] double evaluate(const double x) override {
@@ -119,9 +112,22 @@ namespace az {
         }
     };
 
+    struct Ln : Expression {
+        explicit Ln(std::shared_ptr<Expression> p) : prod(std::move(p)) {}
+
+        std::shared_ptr<Expression> prod;
+
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            if (t <= 0.0) {
+                return std::nan("");
+            }
+            return std::isnan(t) ? t : std::log(t);
+        }
+    };
+
     struct Negative : Expression {
-        explicit Negative(std::shared_ptr<Expression> p) : prod(std::move(p)) {
-        };
+        explicit Negative(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
 
         [[nodiscard]] double evaluate(const double x) override {
@@ -132,8 +138,7 @@ namespace az {
 
     struct Pow : Expression {
         explicit Pow(std::shared_ptr<Expression> l, std::shared_ptr<Expression> r)
-            : lhs(std::move(l)), rhs(std::move(r)) {
-        };
+            : lhs(std::move(l)), rhs(std::move(r)) {};
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
@@ -147,8 +152,7 @@ namespace az {
 
     struct Mul : Expression {
         explicit Mul(std::shared_ptr<Expression> l, std::shared_ptr<Expression> r)
-            : lhs(std::move(l)), rhs(std::move(r)) {
-        };
+            : lhs(std::move(l)), rhs(std::move(r)) {};
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
@@ -162,8 +166,7 @@ namespace az {
 
     struct Div : Expression {
         explicit Div(std::shared_ptr<Expression> l, std::shared_ptr<Expression> r)
-            : lhs(std::move(l)), rhs(std::move(r)) {
-        };
+            : lhs(std::move(l)), rhs(std::move(r)) {};
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
@@ -181,8 +184,7 @@ namespace az {
 
     struct Plus : Expression {
         explicit Plus(std::shared_ptr<Expression> l, std::shared_ptr<Expression> r)
-            : lhs(std::move(l)), rhs(std::move(r)) {
-        };
+            : lhs(std::move(l)), rhs(std::move(r)) {};
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
@@ -196,8 +198,7 @@ namespace az {
 
     struct Minus : Expression {
         explicit Minus(std::shared_ptr<Expression> l, std::shared_ptr<Expression> r)
-            : lhs(std::move(l)), rhs(std::move(r)) {
-        };
+            : lhs(std::move(l)), rhs(std::move(r)) {};
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
 
@@ -289,10 +290,16 @@ namespace az {
                     static constexpr auto value = lexy::callback<std::shared_ptr<Cbrt>>(callback<Cbrt>);
                 };
 
+                struct ln {
+                    static constexpr auto rule = dsl::lit<"ln"> >> dsl::parenthesized(dsl::p<expression>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Ln>>(callback<Ln>);
+                };
+
                 static constexpr auto whitespace = dsl::ascii::space;
                 static constexpr auto atom = [] {
-                    auto function =
-                            dsl::p<sin> | dsl::p<cos> | dsl::p<tan> | dsl::p<cot> | dsl::p<sqrt> | dsl::p<cbrt>;
+                    constexpr auto function =
+                            dsl::p<sin> | dsl::p<cos> | dsl::p<tan> | dsl::p<cot> | dsl::p<sqrt> | dsl::p<cbrt>
+                            | dsl::p<ln>;
                     return function | dsl::p<number> | dsl::p<x> | dsl::parenthesized(dsl::p<expression>);
                 }();
 
@@ -326,6 +333,7 @@ namespace az {
                     forwardCallback<Cot>,
                     forwardCallback<Sqrt>,
                     forwardCallback<Cbrt>,
+                    forwardCallback<Ln>,
                     forwardCallback<Expression>,
                     [](lexy::op<op_minus>, const std::shared_ptr<Expression>& e) {
                         return std::make_shared<Negative>(e);

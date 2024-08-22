@@ -61,6 +61,7 @@ TEST(GrammarTest, FunctionKeywords) {
     auto cotangent = lexy::zstring_input("cot(x)");
     auto squareRoot = lexy::zstring_input("sqrt(x)");
     auto cubeRoot = lexy::zstring_input("cbrt(x)");
+    auto ln = lexy::zstring_input("ln(x)");
 
     EXPECT_TRUE(lexy::match<az::grammar::expression>(sine));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(cosine));
@@ -68,4 +69,5 @@ TEST(GrammarTest, FunctionKeywords) {
     EXPECT_TRUE(lexy::match<az::grammar::expression>(cotangent));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(squareRoot));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(cubeRoot));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(ln));
 }
