@@ -154,6 +154,56 @@ namespace az {
         }
     };
 
+    struct Arcsin : Expression {
+        explicit Arcsin(std::shared_ptr<Expression> p) : prod(std::move(p)) {}
+
+        std::shared_ptr<Expression> prod;
+
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            if (std::isnan(t)) {
+                return t;
+            }
+
+            if (t > std::numbers::pi /2 || t < -std::numbers::pi / 2) {
+                return std::nan("");
+            }
+
+            return std::asin(t);
+        }
+    };
+
+    struct Arccos : Expression {
+        explicit Arccos(std::shared_ptr<Expression> p) : prod(std::move(p)) {}
+
+        std::shared_ptr<Expression> prod;
+
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+            if (std::isnan(t)) {
+                return t;
+            }
+
+            if (t > 1 || t < -1) {
+                return std::nan("");
+            }
+
+            return std::acos(t);
+        }
+    };
+
+    struct Arctan : Expression {
+        explicit Arctan(std::shared_ptr<Expression> p) : prod(std::move(p)) {}
+
+        std::shared_ptr<Expression> prod;
+
+        [[nodiscard]] double evaluate(const double x) override {
+            const double t = prod->evaluate(x);
+
+            return std::isnan(t) ? t : std::atan(t);
+        }
+    };
+
     struct Negative : Expression {
         explicit Negative(std::shared_ptr<Expression> p) : prod(std::move(p)) {};
         std::shared_ptr<Expression> prod;
@@ -333,11 +383,26 @@ namespace az {
                     static constexpr auto value = lexy::callback<std::shared_ptr<Log>>(callback<Log>);
                 };
 
+                struct arcsin {
+                    static constexpr auto rule = dsl::lit<"arcsin"> >> dsl::parenthesized(dsl::p<expression>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Arcsin>>(callback<Arcsin>);
+                };
+
+                struct arccos {
+                    static constexpr auto rule = dsl::lit<"arccos"> >> dsl::parenthesized(dsl::p<expression>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Arccos>>(callback<Arccos>);
+                };
+
+                struct arctan {
+                    static constexpr auto rule = dsl::lit<"arctan"> >> dsl::parenthesized(dsl::p<expression>);
+                    static constexpr auto value = lexy::callback<std::shared_ptr<Arctan>>(callback<Arctan>);
+                };
+
                 static constexpr auto whitespace = dsl::ascii::space;
                 static constexpr auto atom = [] {
                     constexpr auto function =
                             dsl::p<sin> | dsl::p<cos> | dsl::p<tan> | dsl::p<cot> | dsl::p<sqrt> | dsl::p<cbrt>
-                            | dsl::p<ln> | dsl::p<lg> | dsl::p<log>;
+                            | dsl::p<ln> | dsl::p<lg> | dsl::p<log> | dsl::p<arcsin> | dsl::p<arccos> | dsl::p<arctan>;
                     return function | dsl::p<number> | dsl::p<x> | dsl::parenthesized(dsl::p<expression>);
                 }();
 
@@ -374,6 +439,9 @@ namespace az {
                     forwardCallback<Ln>,
                     forwardCallback<Lg>,
                     forwardCallback<Log>,
+                    forwardCallback<Arcsin>,
+                    forwardCallback<Arccos>,
+                    forwardCallback<Arctan>,
                     forwardCallback<Expression>,
                     [](lexy::op<op_minus>, const std::shared_ptr<Expression>& e) {
                         return std::make_shared<Negative>(e);

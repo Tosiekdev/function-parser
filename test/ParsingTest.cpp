@@ -29,6 +29,9 @@ TEST(ParsingTest, Functions) {
     auto ln = az::parse_expression("ln(x)");
     auto lg = az::parse_expression("lg(x)");
     auto log = az::parse_expression("log(x)");
+    auto arcsin = az::parse_expression("arcsin(x)");
+    auto arccos = az::parse_expression("arccos(x)");
+    auto arctan = az::parse_expression("arctan(x)");
     ASSERT_TRUE(sin);
     EXPECT_DOUBLE_EQ(sin->evaluate(3.14), std::sin(3.14));
     ASSERT_TRUE(cos);
@@ -47,6 +50,12 @@ TEST(ParsingTest, Functions) {
     EXPECT_DOUBLE_EQ(lg->evaluate(3.14), std::log2(3.14));
     ASSERT_TRUE(log);
     EXPECT_DOUBLE_EQ(log->evaluate(3.14), std::log10(3.14));
+    ASSERT_TRUE(arcsin);
+    EXPECT_DOUBLE_EQ(arcsin->evaluate(0.14), std::asin(0.14));
+    ASSERT_TRUE(arccos);
+    EXPECT_DOUBLE_EQ(arccos->evaluate(0.14), std::acos(0.14));
+    ASSERT_TRUE(arctan);
+    EXPECT_DOUBLE_EQ(arctan->evaluate(3.14), std::atan(3.14));
 }
 
 TEST(ParsingTest, Exponentitation) {

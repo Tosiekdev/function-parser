@@ -64,6 +64,9 @@ TEST(GrammarTest, FunctionKeywords) {
     auto ln = lexy::zstring_input("ln(x)");
     auto lg = lexy::zstring_input("lg(x)");
     auto log = lexy::zstring_input("log(x)");
+    auto arcsin = lexy::zstring_input("arcsin(x)");
+    auto arccos = lexy::zstring_input("arccos(x)");
+    auto arctan = lexy::zstring_input("arctan(x)");
 
     EXPECT_TRUE(lexy::match<az::grammar::expression>(sine));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(cosine));
@@ -74,4 +77,7 @@ TEST(GrammarTest, FunctionKeywords) {
     EXPECT_TRUE(lexy::match<az::grammar::expression>(ln));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(lg));
     EXPECT_TRUE(lexy::match<az::grammar::expression>(log));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(arcsin));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(arccos));
+    EXPECT_TRUE(lexy::match<az::grammar::expression>(arctan));
 }
