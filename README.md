@@ -59,6 +59,12 @@ expression `function_kw(x)`. Library supports this function keywords:
 * `cot` - calculates cotangent,
 * `sqrt` - calculates square root,
 * `cbrt` - calculates cube root.
+* `ln` - calculates natural logarithm.
+* `log` - calculates base 10 logarithm.
+* `lg` - calculates base 2 logarithm.
+* `arcsin` - calculates arcsine.
+* `arccos` - calculates arccosine.
+* `arctan` - calculates arctangent.
 
 Operation order is preserved and brackets are supported to force 
 operation order. Example:
